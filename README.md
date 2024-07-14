@@ -1,5 +1,7 @@
-一丶模拟内存分配与垃圾回收场景
-每分钟进行100次操作（可能是分配或者释放）
+<a name="CX2em"></a>
+# 一丶模拟内存分配与垃圾回收场景
+**每分钟进行100次操作（可能是分配或者释放）**
+```java
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -46,19 +48,24 @@ public class G1GCDemo2 {
         System.out.println("程序运行结束");
     }
 }
+```
+<a name="xWw9n"></a>
+## 
+<a name="RvNXh"></a>
+# 二丶日志分析
 
-二丶日志分析
+<a name="kbtNc"></a>
+## 默认启动条件
 
-默认启动条件
+<a name="iq9DG"></a>
+### 启动参数
+-XX:+UseG1GC "<br />-XX:+PrintGCDetails<br />-javaagent:"D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=57461:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" -Dfile.encoding=UTF-8 <br />-classpath D:\AAComputerCourse\AACode\G1\target\classes G1GCDemo 
 
-启动参数
--XX:+UseG1GC "
--XX:+PrintGCDetails
--javaagent:"D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=57461:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" -Dfile.encoding=UTF-8 
--classpath D:\AAComputerCourse\AACode\G1\target\classes G1GCDemo 
-
-日志分析
-初始参数
+<a name="ltRcF"></a>
+### 日志分析
+<a name="cifvu"></a>
+#### 初始参数
+```java
 [0.004s][warning][gc] -XX:+PrintGCDetails is deprecated. Will use -Xlog:gc* instead.
 [0.009s][info   ][gc] Using G1
 [0.011s][info   ][gc,init] Version: 17.0.11+1-LTS (release)
@@ -79,14 +86,14 @@ public class G1GCDemo2 {
 [0.019s][info   ][gc,metaspace] CDS archive(s) mapped at: [0x000001f8d8000000-0x000001f8d8bc0000-0x000001f8d8bc0000), size 12320768, SharedBaseAddress: 0x000001f8d8000000, ArchiveRelocationMode: 1.
 [0.019s][info   ][gc,metaspace] Compressed class space mapped at: 0x000001f8d9000000-0x000001f919000000, reserved size: 1073741824
 [0.019s][info   ][gc,metaspace] Narrow klass base: 0x000001f8d8000000, Narrow klass shift: 0, Narrow klass range: 0x100000000
-Heap Region Size: 2M 每个区域大小为2M
-Heap Min Capacity: 8M 总区域最小为8M
-Heap Initial Capacity: 244M  总区域初始化为244M
-Heap Max Capacity: 3890M 总区域最大为3890M
-[0.011s][info   ][gc,init] Concurrent Refinement Workers: 13 13个并发标记线程
+```
+**Heap Region Size: 2M** 每个区域大小为2M<br />**Heap Min Capacity: 8M **总区域最小为8M<br />**Heap Initial Capacity: 244M ** 总区域初始化为244M<br />**Heap Max Capacity: 3890M **总区域最大为3890M<br />**[0.011s][info   ][gc,init] Concurrent Refinement Workers: 13 **13个并发标记线程
 
-GC日志分析
-总日志
+<a name="TTidf"></a>
+#### GC日志分析
+<a name="LgHq1"></a>
+##### 总日志
+```java
 "D:\Program Files\Java\TencentKona-17.0.11.b1\bin\java.exe" -XX:+PrintGCDetails "-javaagent:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=57461:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" -Dfile.encoding=UTF-8 -classpath D:\AAComputerCourse\AACode\G1\target\classes G1GCDemo "-javaagent:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=61479:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" G1GCDemo3
 [0.004s][warning][gc] -XX:+PrintGCDetails is deprecated. Will use -Xlog:gc* instead.
 [0.009s][info   ][gc] Using G1
@@ -237,7 +244,10 @@ GC日志分析
 
 进程已结束，退出代码为 0
 
-GC0
+```
+<a name="AcOWi"></a>
+##### GC0
+```java
 [10.849s][info   ][gc,start    ] GC(0) Pause Young (Normal) (G1 Evacuation Pause)
 [10.849s][info   ][gc,task     ] GC(0) Using 5 workers of 13 for evacuation
 [10.851s][info   ][gc,phases   ] GC(0)   Pre Evacuate Collection Set: 0.1ms
@@ -253,27 +263,23 @@ GC0
 [10.852s][info   ][gc,metaspace] GC(0) Metaspace: 997K(1152K)->997K(1152K) NonClass: 915K(960K)->915K(960K) Class: 82K(192K)->82K(192K)
 [10.852s][info   ][gc          ] GC(0) Pause Young (Normal) (G1 Evacuation Pause) 21M->1M(244M) 2.483ms
 [10.852s][info   ][gc,cpu      ] GC(0) User=0.00s Sys=0.00s Real=0.00s
-GC(0) Eden regions: 11->0(18)  eden直接归0
-GC(0) Survivor regions: 0->1(2) survivor多出1个对象
-GC(0) Old regions: 0->0 old不变
-GC(0) Archive regions: 0->0 archive 不变
-GC(0) Humongous regions: 0->0 humongous 不变
-[10.852s][info   ][gc          ] GC(0) Pause Young (Normal) (G1 Evacuation Pause) 21M->1M(244M) 2.483ms  堆内存从21M减少到1M
-[10.852s][info   ][gc,cpu      ] GC(0) User=0.00s Sys=0.00s Real=0.00s 结合上面几个阶段的耗时来看不过来2ms的耗时 十分的短 可以忽略不计 
+```
+**GC(0) Eden regions: 11->0(18)  **eden直接归0<br />**GC(0) Survivor regions: 0->1(2) **survivor多出1个对象<br />**GC(0) Old regions: 0->0 **old不变<br />**GC(0) Archive regions: 0->0 **archive 不变<br />**GC(0) Humongous regions: 0->0 **humongous 不变<br />**[10.852s][info   ][gc          ] GC(0) Pause Young (Normal) (G1 Evacuation Pause) 21M->1M(244M) 2.483ms  **堆内存从21M减少到1M<br />**[10.852s][info   ][gc,cpu      ] GC(0) User=0.00s Sys=0.00s Real=0.00s **结合上面几个阶段的耗时来看不过来2ms的耗时 十分的短 可以忽略不计 
 
-其他GC阶段的日志大同小异 不再赘述
+**其他GC阶段的日志大同小异 不再赘述**
 
-堆结束
+<a name="BVijq"></a>
+##### 堆结束
+```java
 [600.085s][info   ][gc,heap,exit] Heap
 [600.085s][info   ][gc,heap,exit]  garbage-first heap   total 249856K, used 90021K [0x000000070ce00000, 0x0000000800000000)
 [600.085s][info   ][gc,heap,exit]   region size 2048K, 44 young (90112K), 3 survivors (6144K)
 [600.085s][info   ][gc,heap,exit]  Metaspace       used 999K, committed 1216K, reserved 1114112K
 [600.085s][info   ][gc,heap,exit]   class space    used 82K, committed 192K, reserved 1048576K
+```
 
-[600.085s][info   ][gc,heap,exit]  garbage-first heap   total 249856K, used 90021K [0x000000070ce00000, 0x0000000800000000)
-[600.085s][info   ][gc,heap,exit]   region size 2048K, 44 young (90112K), 3 survivors (6144K)  区域大小为2M，44个区域用于young（eden），3个区域用于survivor
-[600.085s][info   ][gc,heap,exit]  Metaspace       used 999K, committed 1216K, reserved 1114112K   由于我的测试程序几乎没有 类加载或卸载   所以说元空间基本没有使用多少和变化
-[600.085s][info   ][gc,heap,exit]   class space    used 82K, committed 192K, reserved 1048576K 类也是几乎没有新增和变化 所以说类空间使用较少和没有变化
+**[600.085s][info   ][gc,heap,exit]  garbage-first heap   total 249856K, used 90021K [0x000000070ce00000, 0x0000000800000000)**<br />**[600.085s][info   ][gc,heap,exit]   region size 2048K, 44 young (90112K), 3 survivors (6144K)  **区域大小为2M，44个区域用于young（eden），3个区域用于survivor<br />**[600.085s][info   ][gc,heap,exit]  Metaspace       used 999K, committed 1216K, reserved 1114112K **  由于我的测试程序几乎没有 类加载或卸载   所以说元空间基本没有使用多少和变化<br />**[600.085s][info   ][gc,heap,exit]   class space    used 82K, committed 192K, reserved 1048576K **类也是几乎没有新增和变化 所以说类空间使用较少和没有变化
+
 
 
 
