@@ -1,4 +1,3 @@
-<a name="CX2em"></a>
 # 一丶模拟内存分配与垃圾回收场景
 **每分钟进行100次操作（可能是分配或者释放）**
 ```java
@@ -49,21 +48,15 @@ public class G1GCDemo2 {
     }
 }
 ```
-<a name="xWw9n"></a>
 ## 
-<a name="RvNXh"></a>
 # 二丶日志分析
 
-<a name="kbtNc"></a>
 ## 默认启动条件
 
-<a name="iq9DG"></a>
 ### 启动参数
 -XX:+UseG1GC "<br />-XX:+PrintGCDetails<br />-javaagent:"D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=57461:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" -Dfile.encoding=UTF-8 <br />-classpath D:\AAComputerCourse\AACode\G1\target\classes G1GCDemo 
 
-<a name="ltRcF"></a>
 ### 日志分析
-<a name="cifvu"></a>
 #### 初始参数
 ```java
 [0.004s][warning][gc] -XX:+PrintGCDetails is deprecated. Will use -Xlog:gc* instead.
@@ -89,9 +82,7 @@ public class G1GCDemo2 {
 ```
 **Heap Region Size: 2M** 每个区域大小为2M<br />**Heap Min Capacity: 8M **总区域最小为8M<br />**Heap Initial Capacity: 244M ** 总区域初始化为244M<br />**Heap Max Capacity: 3890M **总区域最大为3890M<br />**[0.011s][info   ][gc,init] Concurrent Refinement Workers: 13 **13个并发标记线程
 
-<a name="TTidf"></a>
 #### GC日志分析
-<a name="LgHq1"></a>
 ##### 总日志
 ```java
 "D:\Program Files\Java\TencentKona-17.0.11.b1\bin\java.exe" -XX:+PrintGCDetails "-javaagent:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=57461:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" -Dfile.encoding=UTF-8 -classpath D:\AAComputerCourse\AACode\G1\target\classes G1GCDemo "-javaagent:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=61479:D:\Program Files\JetBrains\IntelliJ IDEA 2023.2.2\bin" G1GCDemo3
@@ -245,7 +236,6 @@ public class G1GCDemo2 {
 进程已结束，退出代码为 0
 
 ```
-<a name="AcOWi"></a>
 ##### GC0
 ```java
 [10.849s][info   ][gc,start    ] GC(0) Pause Young (Normal) (G1 Evacuation Pause)
@@ -268,7 +258,6 @@ public class G1GCDemo2 {
 
 **其他GC阶段的日志大同小异 不再赘述**
 
-<a name="BVijq"></a>
 ##### 堆结束
 ```java
 [600.085s][info   ][gc,heap,exit] Heap
