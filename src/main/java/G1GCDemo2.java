@@ -15,7 +15,7 @@ public class G1GCDemo2 {
 
         long start = System.currentTimeMillis();
 
-        long end = start + 60 * 1000 * 10; // 运行10分钟
+        long end = start + 60 * 1000; // 运行1分钟
 
         // 分配一些长生命周期的大对象
         for (int i = 0; i < NUM_LARGE_OBJECTS; i++) {
@@ -28,10 +28,15 @@ public class G1GCDemo2 {
                 // 分配新的对象
                 if(r != 1){
                     // 分配大对象
-                    longLivedObjects.add(new byte[LARGE_OBJECT_SIZE]);
+                    if(random.nextBoolean()){
+                        longLivedObjects.add(new byte[LARGE_OBJECT_SIZE]);
+                    } else {
+                        // 释放一些对象
+                        longLivedObjects.remove(random.nextInt(longLivedObjects.size()));
+                    }
                 } else {
                     // 分配随机大小的数组
-                    objects.add(new byte[random.nextInt(100 * 1024)]);
+                    objects.add(new byte[random.nextInt(100 * 1024)]); // 0 - 100k
                 }
             } else if (!objects.isEmpty()) {
                 // 释放一些对象
