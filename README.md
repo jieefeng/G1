@@ -182,7 +182,7 @@ Concurrent Mark Cycle 8.806ms: 表示整个并发标记周期耗时8.806毫秒
 至此GC日志里面每种类型的日志都已讲述完毕 
 
 <a name="HNub9"></a>
-#### 吞吐量与最大时间
+#### 吞吐量与最大暂停时间
 ![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721226710494-1805be8d-2adc-456f-9673-019a9cf9c1bb.png#averageHue=%23f2f2f2&clientId=uf890166e-d3f1-4&from=paste&height=555&id=u49c46809&originHeight=1109&originWidth=2454&originalType=binary&ratio=2&rotation=0&showTitle=false&size=174322&status=done&style=none&taskId=ub529396a-389d-4453-9b93-b2b6d0ba010&title=&width=1227)<br />借助GCeasy 地址：[https://gceasy.io/index.jsp#features](https://gceasy.io/index.jsp#features)<br />可见我们的吞吐量为99.824% 最大暂停时间为10ms <br />所以说我们的程序目前性能是极其优秀的 
 
 所以说我们接下来修改JVM参数以展示不同参数对吞吐量和最大暂停时间的影响
@@ -261,28 +261,13 @@ public class G1GCDemo2 {
 
 <a name="qDXmw"></a>
 ##### java -Xms256m -Xmx256m -Xlog:gc*:file=gc2.log G1GCDemo2.java
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721234957563-2fea15d8-e534-4a23-a6d7-c9b2aa9588c1.png#averageHue=%23f4f4f3&clientId=uf890166e-d3f1-4&from=paste&height=620&id=u0a48694b&originHeight=1239&originWidth=2557&originalType=binary&ratio=2&rotation=0&showTitle=false&size=144183&status=done&style=none&taskId=u08f355e5-eca5-4399-8a4d-40f14fde63b&title=&width=1278.5)<br />吞吐量为99.94% 这几乎已经无法提升了<br />最大暂停时间仍然为10ms 且响应时间提升了
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721234957563-2fea15d8-e534-4a23-a6d7-c9b2aa9588c1.png#averageHue=%23f4f4f3&clientId=uf890166e-d3f1-4&from=paste&height=620&id=u0a48694b&originHeight=1239&originWidth=2557&originalType=binary&ratio=2&rotation=0&showTitle=false&size=144183&status=done&style=none&taskId=u08f355e5-eca5-4399-8a4d-40f14fde63b&title=&width=1278.5)<br />吞吐量为99.94% 这几乎已经无法提升了<br />最大暂停时间仍然为10ms 且平均暂停时间提升了
 
 <a name="ceNkD"></a>
 ##### java -Xms512m -Xmx512m -Xlog:gc*:file=gc3.log G1GCDemo2.java
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721235207607-e7f35d08-2a2d-4945-89ac-d74caa5092e2.png#averageHue=%23f4f3f3&clientId=uf890166e-d3f1-4&from=paste&height=590&id=u8fd9abd8&originHeight=1180&originWidth=2568&originalType=binary&ratio=2&rotation=0&showTitle=false&size=133852&status=done&style=none&taskId=ucded3f6a-5472-4a3a-a1d2-d6119cb8752&title=&width=1284)<br />吞吐量为99.96% 提升十分少<br />最大暂停时间仍然为10ms 且响应时间提升了
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721235207607-e7f35d08-2a2d-4945-89ac-d74caa5092e2.png#averageHue=%23f4f3f3&clientId=uf890166e-d3f1-4&from=paste&height=590&id=u8fd9abd8&originHeight=1180&originWidth=2568&originalType=binary&ratio=2&rotation=0&showTitle=false&size=133852&status=done&style=none&taskId=ucded3f6a-5472-4a3a-a1d2-d6119cb8752&title=&width=1284)<br />吞吐量为99.96% 提升十分少<br />最大暂停时间仍然为10ms 且平均暂停时间提升了
 
-由此可见 堆大小的提升 可以提升吞吐量但是相应的也增加了响应时间
+由此可见 堆大小的提升 可以提升吞吐量但是相应的也增加了平均暂停时间
 
 <a name="oMae1"></a>
-### 年轻一代
-因为我的测试程序大部分是由于大对象引起的垃圾回收 所以说我应该增加年轻一代的比例 以此减少大对象需要回收的数量 以此减少最大响应时间
-<a name="zTIjE"></a>
-#### 年轻一代和老一代的比例
-<a name="yJBQW"></a>
-##### java -Xms512m -Xmx512m -XX:NewSize=5 -XX:MaxNewSize=5 -Xlog:gc*:file=gc4.log G1GCDemo2.java
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721281056549-dd856b14-9ed0-4dab-a8e8-6f6ae0700faf.png#averageHue=%23f4f4f4&clientId=uf890166e-d3f1-4&from=paste&height=631&id=u70c2321d&originHeight=1261&originWidth=2573&originalType=binary&ratio=2&rotation=0&showTitle=false&size=145493&status=done&style=none&taskId=u4720f16d-9f1c-45fe-9e1e-59c5a5daf12&title=&width=1286.5)<br />对比总堆大小为512M的情况，虽然说吞吐量有所降低，但是无论是最大响应时间还是平均响应时间都有较大提升
-
-<a name="VwT0p"></a>
-##### java -Xms512m -Xmx512m -XX:NewSize=6 -XX:MaxNewSize=6 -Xlog:gc*:file=gc5.log G1GCDemo2.java
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721282207964-5623102c-8ad6-405e-b9df-3ec02672de11.png#averageHue=%23f4f4f3&clientId=uf890166e-d3f1-4&from=paste&height=619&id=u026cb200&originHeight=1237&originWidth=2548&originalType=binary&ratio=2&rotation=0&showTitle=false&size=142876&status=done&style=none&taskId=ue98bbc60-02af-439b-8c88-95025d89735&title=&width=1274)<br />最大响应时间也有所降低
-<a name="btsCJ"></a>
-##### java -Xms512m -Xmx512m -XX:NewSize=7 -XX:MaxNewSize=7 -Xlog:gc*:file=gc6.log G1GCDemo2.java
-![image.png](https://cdn.nlark.com/yuque/0/2024/png/38451585/1721281912503-1b5d4586-89d0-4473-83c5-5e3dc8304f5b.png#averageHue=%23f4f4f4&clientId=uf890166e-d3f1-4&from=paste&height=647&id=u36868185&originHeight=1294&originWidth=2599&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143144&status=done&style=none&taskId=u9ec56e25-880a-4d76-8c2a-b23495a5b61&title=&width=1299.5)<br />最大响应时间显著降低
-
-虽然通过调整年轻一代和老一代的比例能够使最大响应时间降低，但是平均响应时间是大致不变的
+### 
